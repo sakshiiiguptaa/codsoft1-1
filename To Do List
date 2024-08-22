@@ -1,6 +1,5 @@
 import json
 import os
-
 # Define file path
 FILE_PATH = "todo_list.json"
 
