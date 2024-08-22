@@ -1,0 +1,87 @@
+import json
+import os
+
+# Define file path
+FILE_PATH = "todo_list.json"
+
+def load_tasks():
+    if os.path.exists(FILE_PATH):
+        with open(FILE_PATH, "r") as file:
+            return json.load(file)
+    return []
+
+def save_tasks(tasks):
+    with open(FILE_PATH, "w") as file:
+        json.dump(tasks, file, indent=4)
+
+def display_tasks(tasks):
+    if not tasks:
+        print("No tasks available.")
+    for index, task in enumerate(tasks):
+        status = "Done" if task['completed'] else "Pending"
+        print(f"{index + 1}. {task['description']} [{status}]")
+
+def add_task(tasks):
+    description = input("Enter task description: ")
+    tasks.append({"description": description, "completed": False})
+    save_tasks(tasks)
+    print("Task added.")
+
+def update_task(tasks):
+    display_tasks(tasks)
+    index = int(input("Enter the task number to update: ")) - 1
+    if 0 <= index < len(tasks):
+        tasks[index]['description'] = input("Enter new task description: ")
+        save_tasks(tasks)
+        print("Task updated.")
+    else:
+        print("Invalid task number.")
+
+def delete_task(tasks):
+    display_tasks(tasks)
+    index = int(input("Enter the task number to delete: ")) - 1
+    if 0 <= index < len(tasks):
+        tasks.pop(index)
+        save_tasks(tasks)
+        print("Task deleted.")
+    else:
+        print("Invalid task number.")
+
+def mark_task_complete(tasks):
+    display_tasks(tasks)
+    index = int(input("Enter the task number to mark as complete: ")) - 1
+    if 0 <= index < len(tasks):
+        tasks[index]['completed'] = True
+        save_tasks(tasks)
+        print("Task marked as complete.")
+    else:
+        print("Invalid task number.")
+
+def main():
+    tasks = load_tasks()
+    while True:
+        print("\nTo-Do List Menu:")
+        print("1. View tasks")
+        print("2. Add task")
+        print("3. Update task")
+        print("4. Delete task")
+        print("5. Mark task complete")
+        print("6. Exit")
+        choice = input("Choose an option: ")
+        if choice == '1':
+            display_tasks(tasks)
+        elif choice == '2':
+            add_task(tasks)
+        elif choice == '3':
+            update_task(tasks)
+        elif choice == '4':
+            delete_task(tasks)
+        elif choice == '5':
+            mark_task_complete(tasks)
+        elif choice == '6':
+            break
+        else:
+            print("Invalid choice. Please select a valid option.")
+
+if __name__ == "__main__":
+    main()
